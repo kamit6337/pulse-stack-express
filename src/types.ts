@@ -7,7 +7,7 @@ export type ErrorBucket = {
 
 export type CreateIssueType = {
   message: string;
-  name?: string;
+  name: string;
   stack?: string;
   code?: string;
   environment: "development" | "staging" | "production";

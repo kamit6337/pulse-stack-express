@@ -7,6 +7,8 @@ const failedPayload: ErrorBucket[] = [];
 export const flushErrors = async () => {
   if (errorMap.size === 0) return;
 
+  console.log("ERROR MAP", JSON.stringify(errorMap));
+
   const payload = Array.from(errorMap.values());
 
   errorMap.clear();

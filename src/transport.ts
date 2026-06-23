@@ -1,22 +1,27 @@
 import axios from "axios";
 import { getConfig } from "./client.js";
-import { CreateIssueType } from "./types.js";
 import zlib from "node:zlib";
+import { ErrorBucket } from "./types.js";
+import { BASE_URL } from "./base_url.js";
 
-const BASE_URL = "https://pulse-stack-hm6s.onrender.com";
-
-const compressedPayload = (payload: any) => {
-  return zlib.gzipSync(JSON.stringify(payload));
+const compressedPayload = (payload: ErrorBucket[]) => {
+  return zlib.brotliCompressSync(Buffer.from(JSON.stringify(payload)));
 };
 
-export const sendError = async (payload: any) => {
+export const sendError = async (payload: ErrorBucket[]) => {
   const key = getConfig().apiKey;
 
-  await axios.post(`${BASE_URL}/issues`, compressedPayload(payload), {
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Encoding": "gzip",
-      "Content-Type": "application/json",
+  const response = await axios.post(
+    `${BASE_URL}/issues`,
+    compressedPayload(payload),
+    {
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Encoding": "br",
+        "Content-Type": "application/octet-stream",
+      },
     },
-  });
+  );
+
+  console.log("RESPONSE SEND ERROR", response);
 };

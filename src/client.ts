@@ -14,7 +14,9 @@ export const init = async (options: InitOptions) => {
 
   config = { environment, ...rest };
 
-  await validateKey(options.apiKey);
+  const response = await validateKey(options.apiKey);
+
+  console.log("VALIDATE RESPONSE", response);
 
   registerGlobalHandlers();
 
