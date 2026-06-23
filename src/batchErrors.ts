@@ -5,7 +5,7 @@ export const errorMap = new Map<string, ErrorBucket>();
 export const batchErrors = (error: CreateIssueType) => {
   const key = `${error.name}:${error.message}`;
 
-  console.log("BATCH ERRORS", JSON.stringify(errorMap));
+  console.log("BATCH ERRORS", errorMap);
 
   const existing = errorMap.get(key);
 
@@ -21,4 +21,6 @@ export const batchErrors = (error: CreateIssueType) => {
     firstSeen: Date.now(),
     lastSeen: Date.now(),
   });
+
+  console.log("ERROR MAP FROM BATCH ERROR", errorMap);
 };
