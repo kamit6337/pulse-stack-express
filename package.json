@@ -1,6 +1,6 @@
 {
   "name": "@pulse-stack/express",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Official Express.js SDK for Pulse Stack",
   "type": "module",
   "main": "./dist/index.cjs",
