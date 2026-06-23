@@ -11,6 +11,8 @@ const compressedPayload = (payload: ErrorBucket[]) => {
 export const sendError = async (payload: ErrorBucket[]) => {
   const key = getConfig().apiKey;
 
+  console.log("COMPRESSED PAYLOAD", compressedPayload(payload));
+
   const response = await axios.post(
     `${BASE_URL}/issues`,
     compressedPayload(payload),
@@ -23,5 +25,5 @@ export const sendError = async (payload: ErrorBucket[]) => {
     },
   );
 
-  console.log("RESPONSE SEND ERROR", response);
+  console.log("RESPONSE SEND ERROR", response.data);
 };

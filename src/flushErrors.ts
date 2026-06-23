@@ -12,6 +12,7 @@ export const flushErrors = async () => {
   const payload = Array.from(errorMap.values());
 
   console.log("PAYLOAD FLUSH ERROS", payload);
+  console.log("FAILED PAYLOAD FLUSH ERROS", failedPayload);
 
   errorMap.clear();
 
@@ -21,7 +22,8 @@ export const flushErrors = async () => {
     if (failedPayload.length > 0) {
       await sendError(failedPayload);
     }
-  } catch {
+  } catch (error) {
+    console.log("ERROR IN SENDING ERROR", error);
     failedPayload.push(...payload);
 
     // Re-add failed payloads
