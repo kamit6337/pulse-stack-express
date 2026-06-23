@@ -23,9 +23,7 @@ export const flushErrors = async () => {
       await sendError(failedPayload);
     }
   } catch (error) {
-    console.log("ERROR IN SENDING ERROR", error);
+    console.error("ERROR IN SENDING ERROR", error);
     failedPayload.push(...payload);
-
-    // Re-add failed payloads
   }
 };

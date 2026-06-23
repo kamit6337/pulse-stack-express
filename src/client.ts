@@ -4,7 +4,9 @@ import { validateKey } from "./validateKey.js";
 
 export interface InitOptions {
   apiKey: string;
-  environment?: "development" | "staging" | "production";
+  environment: "development" | "staging" | "production";
+  region?: string;
+  release?: string;
 }
 
 let config: InitOptions;

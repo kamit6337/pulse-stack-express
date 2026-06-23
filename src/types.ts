@@ -6,25 +6,17 @@ export type ErrorBucket = {
 };
 
 export type CreateIssueType = {
-  message: string;
   name: string;
+  message: string;
+  environment: "development" | "staging" | "production";
   stack?: string;
   code?: string;
-  environment: "development" | "staging" | "production";
   level: "fatal" | "error" | "warning" | "info";
-  route?: string;
-  release?: string;
-  device?: string;
-
   server?: {
     hostname: string;
     region: string;
   };
-
-  browser?: {
-    name: string;
-    version: string;
-  };
+  route?: string;
 
   request?: {
     method: string;
@@ -44,7 +36,15 @@ export type CreateIssueType = {
     ip?: string;
   };
 
-  tags?: Record<string, string>;
+  release?: string;
+
+  browser?: {
+    name: string;
+    version: string;
+  };
+  device?: string;
+
+  tags?: Map<string, string> | null | undefined;
 
   metadata?: any;
 
