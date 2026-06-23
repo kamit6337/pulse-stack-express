@@ -3,9 +3,11 @@ import { BASE_URL } from "./base_url.js";
 
 export const validateKey = async (key: string) => {
   try {
-    await axios.get(`${BASE_URL}/issues`, {
+    const response = await axios.get(`${BASE_URL}/issues`, {
       headers: { Authorization: `Bearer ${key}` },
     });
+
+    return response.data;
   } catch (error) {
     throw new Error("Please give right secret key");
   }

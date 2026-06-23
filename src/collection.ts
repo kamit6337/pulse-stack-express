@@ -21,5 +21,7 @@ export const collectMiddlewareErrors = (data: CollectionMiddlewareType) => {
     sdk: sdkInfo(),
   };
 
+  console.log("COLLECT MIDDLEWARE ERRORS", modifyData);
+
   batchErrors(modifyData);
 };

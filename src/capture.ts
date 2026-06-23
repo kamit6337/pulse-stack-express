@@ -25,7 +25,7 @@ export const captureException = async (req: Request, err: Error) => {
   };
 
   const obj = {
-    name: err.name,
+    name: err.name || "Unknown Error",
     message: err.message,
     stack: err.stack,
     ip: req.ip,
@@ -33,6 +33,8 @@ export const captureException = async (req: Request, err: Error) => {
     route: req.path,
     level: levelConfig("error"),
   };
+
+  console.log("CAPTURE EXCEPTION", obj);
 
   collectMiddlewareErrors(obj);
 };

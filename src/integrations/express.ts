@@ -1,6 +1,11 @@
-import type { Request } from "express";
 import { collectMiddlewareErrors } from "../collection.js";
 import { levelConfig } from "../level.js";
+import type {
+  Request,
+  Response,
+  NextFunction,
+  ErrorRequestHandler,
+} from "express";
 
 export function sanitizeHeaders(headers: Record<string, any>) {
   const copy = { ...headers };
@@ -12,43 +17,48 @@ export function sanitizeHeaders(headers: Record<string, any>) {
   return copy;
 }
 
-export const expressErrorHandler = () => {
-  return (err: Error, req: Request, res: any, next: any) => {
-    const {
-      baseUrl,
-      route,
-      body,
-      headers,
-      hostname,
-      ip,
-      originalUrl,
-      params,
-      path, //route
-      query,
-    } = req;
+export const expressErrorHandler: ErrorRequestHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  // const {
+  //   baseUrl,
+  //   route,
+  //   body,
+  //   headers,
+  //   hostname,
+  //   ip,
+  //   originalUrl,
+  //   params,
+  //   path, //route
+  //   query,
+  // } = req;
 
-    const request = {
-      method: req.method,
-      url: req.url,
-      path: req.path,
+  const request = {
+    method: req.method,
+    url: req.url,
+    path: req.path,
 
-      query: req.query,
-      body: req.body,
-      headers: sanitizeHeaders(req.headers),
-    };
-
-    const obj = {
-      name: err.name,
-      message: err.message,
-      stack: err.stack,
-      ip: req.ip,
-      request,
-      route: req.path,
-      level: levelConfig("error"),
-    };
-
-    collectMiddlewareErrors(obj);
-
-    next(err);
+    query: req.query,
+    body: req.body,
+    headers: sanitizeHeaders(req.headers),
   };
+
+  const obj = {
+    name: err.name || "Unknown Error",
+    message: err.message,
+    stack: err.stack,
+    ip: req.ip,
+    request,
+    route: req.path,
+    level: levelConfig("error"),
+  };
+
+  console.log("OBJECT FROM EXPRESS ERROR HANDLER", obj);
+
+  collectMiddlewareErrors(obj);
+
+  next(err);
 };
