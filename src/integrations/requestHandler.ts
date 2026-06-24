@@ -3,6 +3,8 @@ import { requestStorage } from "./storage";
 
 const requestHandler = (): RequestHandler => {
   return (req: Request, res: Response, next: NextFunction) => {
+    console.log("Request Handler", req.originalUrl);
+
     requestStorage.run(req, () => {
       next();
     });

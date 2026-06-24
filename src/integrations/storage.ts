@@ -11,6 +11,8 @@ export const requestStorage = new AsyncLocalStorage<Request>();
 export const getRequestStorageInfo = () => {
   const req = requestStorage.getStore();
 
+  console.log("REQUEST", req);
+
   if (!req) {
     throw new Error("No request found in AsyncLocalStorage context");
   }
