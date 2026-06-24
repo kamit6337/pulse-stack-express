@@ -20,6 +20,10 @@ export const getRequestStorageInfo = () => {
   const systemConfig = system();
   const ua = new UAParser(req.headers["user-agent"]);
 
+  console.log("USER AGENT", req.headers["user-agent"]);
+  console.log("UA", ua);
+  console.log("UA BROWSER", ua.getBrowser());
+
   return {
     request: {
       method: req.method,
@@ -34,7 +38,7 @@ export const getRequestStorageInfo = () => {
       version: ua.getBrowser().version ?? "unknown",
     },
     device: ua.getDevice().type ?? "desktop",
-    route: req.route,
+    route: req.route?.path as string | undefined,
     runtime: { ip: req.ip, ...systemConfig.runtime },
     server: systemConfig.server,
     sdk: sdkInfo(),
