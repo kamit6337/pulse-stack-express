@@ -26,7 +26,6 @@ export type CreateIssueEventType = {
     method: string;
     url: string;
     path: string;
-
     query?: any;
     body?: any;
     headers: any;

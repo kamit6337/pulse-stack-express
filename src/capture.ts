@@ -1,4 +1,3 @@
-import type { Request } from "express";
 import { BatchErrorType } from "./types.js";
 import { system } from "./handlers/system.js";
 import { getConfig } from "./client.js";
@@ -15,8 +14,8 @@ type CollectionMiddlewareType = {
   tags?: Record<string, string>;
 };
 
-export const captureException = async (req: Request, err: Error) => {
-  middleware(req, err);
+export const captureException = async (err: Error) => {
+  middleware(err);
 };
 
 export const captureMessage = async (data: CollectionMiddlewareType) => {

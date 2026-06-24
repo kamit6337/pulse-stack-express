@@ -2,13 +2,17 @@ import { captureMessage } from "../capture.js";
 import { flushErrors } from "../flushErrors.js";
 
 export const registerGlobalHandlers = () => {
-  process.on("uncaughtException", (error) => {
+  process.on("uncaughtException", async (error) => {
     captureMessage({
       name: error.name,
       message: error.message,
       stack: error.stack,
       level: "info",
     });
+
+    await flushErrors();
+
+    process.exit(1);
   });
 
   process.on("unhandledRejection", (reason) => {
