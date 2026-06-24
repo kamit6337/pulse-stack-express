@@ -12,17 +12,21 @@ export interface InitOptions {
 let config: InitOptions;
 
 export const init = async (options: InitOptions) => {
-  const { environment = "production", ...rest } = options;
+  try {
+    const { environment = "production", ...rest } = options;
 
-  config = { environment, ...rest };
+    config = { environment, ...rest };
 
-  const response = await validateKey(options.apiKey);
+    await validateKey(options.apiKey);
 
-  console.log("VALIDATE RESPONSE", response);
+    console.log("Monitoring is started successfully");
 
-  registerGlobalHandlers();
+    registerGlobalHandlers();
 
-  startBatchProcessor();
+    startBatchProcessor();
+  } catch (error) {
+    console.error("Error in starting Monitoring", error);
+  }
 };
 
 export const getConfig = () => config;

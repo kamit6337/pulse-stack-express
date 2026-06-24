@@ -1,5 +1,5 @@
 import type { Request } from "express";
-import { CreateIssueType } from "./types.js";
+import { BatchErrorType } from "./types.js";
 import { system } from "./handlers/system.js";
 import { getConfig } from "./client.js";
 import { sdkInfo } from "./sdk.js";
@@ -12,6 +12,7 @@ type CollectionMiddlewareType = {
   level: "fatal" | "error" | "warning" | "info";
   stack?: string;
   route?: string;
+  tags?: Record<string, string>;
 };
 
 export const captureException = async (req: Request, err: Error) => {
@@ -19,21 +20,24 @@ export const captureException = async (req: Request, err: Error) => {
 };
 
 export const captureMessage = async (data: CollectionMiddlewareType) => {
-  const { name, message, level, stack, route } = data;
+  const { name, message, level, stack, route, tags } = data;
 
   const systemConfig = system();
 
-  const obj: CreateIssueType = {
+  const obj: BatchErrorType = {
     name,
     message,
-    environment: getConfig().environment,
-    stack,
-    level,
-    server: systemConfig.server,
-    route,
-    runtime: systemConfig.runtime,
-    release: getConfig().release,
-    sdk: sdkInfo(),
+    error: {
+      environment: getConfig().environment,
+      stack,
+      level,
+      server: systemConfig.server,
+      route,
+      runtime: systemConfig.runtime,
+      release: getConfig().release,
+      tags,
+      sdk: sdkInfo(),
+    },
   };
 
   batchErrors(obj);

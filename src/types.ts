@@ -1,13 +1,18 @@
-export type ErrorBucket = {
-  error: CreateIssueType;
-  count: number;
-  firstSeen: number;
-  lastSeen: number;
-};
+export type BatchErrorType = Omit<
+  ErrorBucket,
+  "occurrenceCount" | "firstSeen" | "lastSeen"
+>;
 
-export type CreateIssueType = {
+export type ErrorBucket = {
   name: string;
   message: string;
+  occurrenceCount: number;
+  firstSeen: Date;
+  lastSeen: Date;
+  error: CreateIssueEventType;
+};
+
+export type CreateIssueEventType = {
   environment: "development" | "staging" | "production";
   stack?: string;
   code?: string;
@@ -17,7 +22,6 @@ export type CreateIssueType = {
     region: string;
   };
   route?: string;
-
   request?: {
     method: string;
     url: string;
@@ -27,7 +31,6 @@ export type CreateIssueType = {
     body?: any;
     headers: any;
   };
-
   runtime: {
     nodeVersion: string;
     platform: string;
@@ -35,16 +38,14 @@ export type CreateIssueType = {
     cpuUsage: number;
     ip?: string;
   };
-
   release?: string;
-
   browser?: {
     name: string;
     version: string;
   };
   device?: string;
 
-  tags?: Map<string, string> | null | undefined;
+  tags?: Record<string, string>;
 
   metadata?: any;
 

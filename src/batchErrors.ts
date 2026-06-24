@@ -1,25 +1,29 @@
-import type { CreateIssueType, ErrorBucket } from "./types.js";
+import type { BatchErrorType, ErrorBucket } from "./types.js";
 
 export const errorMap = new Map<string, ErrorBucket>();
 
-export const batchErrors = (error: CreateIssueType) => {
-  const key = `${error.name}:${error.message}`;
+export const batchErrors = (errorBucket: BatchErrorType) => {
+  const key = `${errorBucket.name}:${errorBucket.message}`;
 
   console.log("BATCH ERRORS", errorMap);
 
   const existing = errorMap.get(key);
 
+  const now = new Date(Date.now());
+
   if (existing) {
-    existing.count++;
-    existing.lastSeen = Date.now();
+    existing.occurrenceCount++;
+    existing.lastSeen = now;
     return;
   }
 
   errorMap.set(key, {
-    error,
-    count: 1,
-    firstSeen: Date.now(),
-    lastSeen: Date.now(),
+    name: errorBucket.name,
+    message: errorBucket.message,
+    occurrenceCount: 1,
+    firstSeen: now,
+    lastSeen: now,
+    error: errorBucket.error,
   });
 
   console.log("ERROR MAP FROM BATCH ERROR", errorMap);

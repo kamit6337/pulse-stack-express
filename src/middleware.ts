@@ -3,7 +3,7 @@ import { levelConfig } from "./level";
 import { system } from "./handlers/system";
 import { batchErrors } from "./batchErrors";
 import { getConfig } from "./client";
-import { CreateIssueType } from "./types";
+import { BatchErrorType } from "./types";
 import { UAParser } from "ua-parser-js";
 import { sdkInfo } from "./sdk";
 
@@ -24,31 +24,32 @@ export const middleware = (req: Request, err: Error) => {
 
   const request = {
     method: req.method,
-    url: req.url,
+    url: req.originalUrl,
     path: req.path,
-
     query: req.query,
     body: req.body,
     headers: sanitizeHeaders(req.headers),
   };
 
-  const obj: CreateIssueType = {
+  const obj: BatchErrorType = {
     name: err.name || "Unknown Error",
     message: err.message,
-    environment: getConfig().environment,
-    stack: err.stack,
-    level: levelConfig("error"),
-    server: systemConfig.server,
-    route: req.path,
-    request,
-    runtime: { ip: req.ip, ...systemConfig.runtime },
-    release: getConfig().release,
-    browser: {
-      name: ua.getBrowser().name ?? "unknown",
-      version: ua.getBrowser().version ?? "unknown",
+    error: {
+      environment: getConfig().environment,
+      stack: err.stack,
+      level: levelConfig("error"),
+      server: systemConfig.server,
+      route: req.path,
+      request,
+      runtime: { ip: req.ip, ...systemConfig.runtime },
+      release: getConfig().release,
+      browser: {
+        name: ua.getBrowser().name ?? "unknown",
+        version: ua.getBrowser().version ?? "unknown",
+      },
+      device: ua.getDevice().type ?? "desktop",
+      sdk: sdkInfo(),
     },
-    device: ua.getDevice().type ?? "desktop",
-    sdk: sdkInfo(),
   };
 
   console.log("MIDDLEWARE EXCEPTION", obj);
