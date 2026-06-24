@@ -5,7 +5,7 @@ export const registerGlobalHandlers = () => {
   console.log("RegisterGlobalHandlers");
 
   process.on("uncaughtException", async (error) => {
-    console.log("UncaughtException");
+    console.log("UncaughtException", error);
 
     captureMessage({
       name: error.name,
@@ -14,9 +14,9 @@ export const registerGlobalHandlers = () => {
       level: "info",
     });
 
-    await flushErrors();
-
-    process.exit(1);
+    flushErrors()
+      .catch(console.error)
+      .finally(() => process.exit(1));
   });
 
   process.on("unhandledRejection", async (reason) => {
