@@ -1,5 +1,5 @@
 import { captureMessage } from "../capture.js";
-import { flushErrors } from "../flushErrors.js";
+import { close } from "../close.js";
 
 export const registerGlobalHandlers = () => {
   console.log("RegisterGlobalHandlers");
@@ -14,9 +14,9 @@ export const registerGlobalHandlers = () => {
       level: "info",
     });
 
-    flushErrors()
-      .catch(console.error)
-      .finally(() => process.exit(1));
+    await close();
+
+    process.exit(1);
   });
 
   process.on("unhandledRejection", async (reason) => {
@@ -30,22 +30,24 @@ export const registerGlobalHandlers = () => {
       level: "info",
     });
 
-    await flushErrors();
+    await close();
 
     process.exit(1);
   });
 
   process.on("beforeExit", async () => {
-    await flushErrors();
+    await close();
   });
 
   process.on("SIGINT", async () => {
-    await flushErrors();
+    await close();
+
     process.exit(0);
   });
 
   process.on("SIGTERM", async () => {
-    await flushErrors();
+    await close();
+
     process.exit(0);
   });
 };

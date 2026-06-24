@@ -2,6 +2,7 @@ import { init } from "./client.js";
 import { captureException, captureMessage } from "./capture.js";
 import { expressErrorHandler } from "./integrations/express.js";
 import requestHandler from "./integrations/requestHandler.js";
+import { close } from "./close.js";
 export type { InitOptions } from "./client.js";
 
 const Monitor = {
@@ -10,6 +11,7 @@ const Monitor = {
   captureMessage,
   expressErrorHandler,
   requestHandler,
+  close,
 };
 
 export default Monitor;
