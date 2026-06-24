@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { requestStorage } from "./storage";
 
-const requestHandler = () => {
+const requestHandler = (): RequestHandler => {
   return (req: Request, res: Response, next: NextFunction) => {
     requestStorage.run(req, () => {
       next();
