@@ -12,6 +12,8 @@ export interface InitOptions {
 let config: InitOptions;
 
 export const init = async (options: InitOptions) => {
+  registerGlobalHandlers();
+
   try {
     const { environment = "production", ...rest } = options;
 
@@ -20,8 +22,6 @@ export const init = async (options: InitOptions) => {
     await validateKey(options.apiKey);
 
     console.log("Monitoring is started successfully");
-
-    registerGlobalHandlers();
 
     startBatchProcessor();
   } catch (error) {
