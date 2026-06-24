@@ -6,7 +6,20 @@ import { UAParser } from "ua-parser-js";
 import { system } from "../handlers/system";
 import { sdkInfo } from "../sdk";
 
-export const requestStorage = new AsyncLocalStorage<Request>();
+type CustomRequest = Pick<
+  Request,
+  | "method"
+  | "path"
+  | "url"
+  | "originalUrl"
+  | "query"
+  | "body"
+  | "headers"
+  | "route"
+  | "ip"
+>;
+
+export const requestStorage = new AsyncLocalStorage<CustomRequest>();
 
 export const getRequestStorageInfo = () => {
   const req = requestStorage.getStore();
